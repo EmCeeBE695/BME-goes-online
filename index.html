@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Online BME Master's Landscape</title>
+<link rel="icon" href="data:,">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink2: #52514e;
+  --muted: #6e6c66;
+  --line: #e1e0d9;
+  --axis: #c3c2b7;
+  --accent: #2a78d6;
+  --accent-ink: #1c5cab;
+  --s1: #2a78d6;
+  --s2: #1baf7a;
+  --mock: #eb6834;
+  --mock-ink: #a8430f;
+  --d0: #ecebe6; --d0t: #6e6c66;
+  --d1: #b7d3f6; --d1t: #0b0b0b;
+  --d2: #256abf; --d2t: #ffffff;
+  --d3: #104281; --d3t: #ffffff;
+  --hatch: #b9b7ae;
+  --open-bg: #fde8dc; --open-ink: #8f3510;
+  --band-a: #f1f0ec; --band-b: #e9eef6;
+  --shadow: 0 8px 28px rgba(0,0,0,.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --bg: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #a5a39b;
+    --line: #2c2c2a; --axis: #383835; --accent: #3987e5; --accent-ink: #86b6ef;
+    --s1: #3987e5; --s2: #199e70; --mock: #d95926; --mock-ink: #f2a583;
+    --d0: #2c2c2a; --d0t: #a5a39b;
+    --d1: #184f95; --d1t: #ffffff;
+    --d2: #3987e5; --d2t: #0b0b0b;
+    --d3: #9ec5f4; --d3t: #0b0b0b;
+    --hatch: #4a4a46;
+    --open-bg: #3a2418; --open-ink: #f2b08f;
+    --band-a: #222221; --band-b: #1f2733;
+    --shadow: 0 8px 28px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #a5a39b;
+  --line: #2c2c2a; --axis: #383835; --accent: #3987e5; --accent-ink: #86b6ef;
+  --s1: #3987e5; --s2: #199e70; --mock: #d95926; --mock-ink: #f2a583;
+  --d0: #2c2c2a; --d0t: #a5a39b;
+  --d1: #184f95; --d1t: #ffffff;
+  --d2: #3987e5; --d2t: #0b0b0b;
+  --d3: #9ec5f4; --d3t: #0b0b0b;
+  --hatch: #4a4a46;
+  --open-bg: #3a2418; --open-ink: #f2b08f;
+  --band-a: #222221; --band-b: #1f2733;
+  --shadow: 0 8px 28px rgba(0,0,0,.6);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: var(--accent-ink); }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+h1 { font-size: 1.35rem; margin: 0; line-height: 1.25; }
+h2 { font-size: 1.1rem; margin: 0 0 .6rem; }
+h3 { font-size: .95rem; margin: 1rem 0 .4rem; }
+.sub { color: var(--ink2); font-size: .88rem; margin: .15rem 0 0; }
+.muted { color: var(--muted); }
+.small { font-size: .82rem; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header.top { padding: 14px 0 0; }
+.top-row { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+.theme-btn {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px 12px; font-size: .85rem;
+}
+.tabs { display: flex; gap: 4px; margin-top: 12px; border-bottom: 1px solid var(--line); }
+.tab {
+  background: none; border: 0; border-bottom: 3px solid transparent; padding: 9px 14px;
+  font-weight: 600; color: var(--ink2); border-radius: 6px 6px 0 0;
+}
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tab:hover { background: var(--surface); }
+
+main { padding: 16px 0 48px; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px;
+}
+.banner {
+  display: flex; gap: 12px; justify-content: space-between; align-items: flex-start;
+  background: var(--open-bg); color: var(--open-ink); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;
+  font-size: .9rem;
+}
+.banner button { background: none; border: 0; font-size: 1.3rem; line-height: 1; padding: 0 4px; color: inherit; }
+
+/* filters */
+.filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px 18px; align-items: start; }
+.filters fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.filters legend, .filters label.lbl { font-size: .78rem; font-weight: 600; color: var(--ink2); text-transform: uppercase; letter-spacing: .03em; padding: 0; margin-bottom: 4px; display: block; }
+.checks { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.checks label { font-size: .88rem; display: inline-flex; gap: 5px; align-items: center; }
+select { background: var(--bg); border: 1px solid var(--axis); border-radius: 8px; padding: 6px 8px; width: 100%; max-width: 100%; }
+.range-pair { display: grid; gap: 2px; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.note { font-size: .85rem; color: var(--ink2); margin: 10px 0 0; }
+.note b { color: var(--ink); }
+.btn { background: var(--bg); border: 1px solid var(--axis); border-radius: 8px; padding: 6px 12px; font-size: .88rem; }
+.btn:hover { border-color: var(--accent); }
+
+/* legend */
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 12px 0 8px; font-size: .82rem; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-grid; place-items: center; width: 24px; height: 20px; border-radius: 4px; font-size: .75rem; font-weight: 700; }
+
+/* heatmap */
+.hm-wrap { overflow: auto; max-height: 74vh; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.hm { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; }
+.hm th, .hm td { padding: 0; }
+.hm thead th {
+  position: sticky; top: 0; z-index: 3; background: var(--surface); vertical-align: bottom;
+  border-bottom: 1px solid var(--axis); font-size: .76rem; font-weight: 600; text-align: center;
+  min-width: 82px; width: 82px; padding: 6px 4px;
+}
+.hm thead th.prog, .hm tbody th.prog, .hm tfoot th.prog { position: sticky; left: 0; z-index: 4; text-align: left; min-width: 250px; width: 250px; background: var(--surface); border-right: 1px solid var(--line); }
+.hm thead th.prog { z-index: 5; }
+.hm thead th.costcol { min-width: 92px; width: 92px; }
+.sortbtn { background: none; border: 0; padding: 2px 3px; font-weight: 600; font-size: inherit; line-height: 1.2; color: var(--ink); border-radius: 4px; }
+.sortbtn:hover { background: var(--bg); }
+.sortbtn .arr { color: var(--accent-ink); }
+.spark { display: block; margin: 0 auto 3px; cursor: default; }
+.spark-cap { display: block; font-size: .66rem; font-weight: 500; color: var(--muted); margin-bottom: 2px; }
+.hm tbody tr { cursor: pointer; }
+.hm tbody th.prog { font-weight: 400; padding: 6px 10px; border-bottom: 1px solid var(--line); }
+.hm tbody tr:hover th.prog, .hm tbody tr:hover td.costtd { background: var(--bg); }
+.hm tbody tr.sel th.prog { box-shadow: inset 4px 0 0 var(--accent); }
+.hm tbody tr.closed th.prog { box-shadow: inset 4px 0 0 var(--mock); }
+.rowbtn { background: none; border: 0; padding: 0; text-align: left; display: block; width: 100%; }
+.pname { font-weight: 600; font-size: .86rem; display: block; line-height: 1.25; }
+.pdeg { font-size: .78rem; color: var(--ink2); display: block; line-height: 1.25; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+.chip { font-size: .68rem; border: 1px solid var(--axis); border-radius: 999px; padding: 0 7px; color: var(--ink2); background: var(--bg); line-height: 1.5; }
+.chip.warn { background: var(--open-bg); color: var(--open-ink); border-color: transparent; font-weight: 600; }
+td.costtd { text-align: center; font-size: .82rem; border-bottom: 1px solid var(--line); background: var(--surface); padding: 4px; font-variant-numeric: tabular-nums; }
+td.costtd .np { color: var(--muted); font-style: italic; font-size: .76rem; }
+.hm td.cell {
+  height: 48px; text-align: center; font-weight: 700; font-size: .88rem;
+  border: 2px solid var(--surface);
+}
+.cell.d0 { background: var(--d0); color: var(--d0t); font-weight: 600; }
+.cell.d1 { background: var(--d1); color: var(--d1t); }
+.cell.d2 { background: var(--d2); color: var(--d2t); }
+.cell.d3 { background: var(--d3); color: var(--d3t); }
+.cell.dn, .sw.dn {
+  background: repeating-linear-gradient(45deg, transparent 0 4px, var(--hatch) 4px 5px), var(--surface);
+  color: var(--muted); font-weight: 600;
+}
+.sw.d0 { background: var(--d0); color: var(--d0t); }
+.sw.d1 { background: var(--d1); color: var(--d1t); }
+.sw.d2 { background: var(--d2); color: var(--d2t); }
+.sw.d3 { background: var(--d3); color: var(--d3t); }
+.hm tfoot td, .hm tfoot th { position: sticky; bottom: 0; z-index: 3; background: var(--surface); border-top: 1px solid var(--axis); text-align: center; padding: 6px 4px; font-size: .8rem; }
+.hm tfoot th.prog { z-index: 5; font-weight: 600; font-size: .78rem; }
+.foot-n { font-size: 1.05rem; font-weight: 700; display: block; line-height: 1.1; }
+.hm tfoot td.open { background: var(--open-bg); color: var(--open-ink); }
+.foot-l { font-size: .68rem; font-weight: 600; display: block; }
+.empty { padding: 28px 16px; text-align: center; color: var(--ink2); }
+
+.absent-box { margin-top: 16px; }
+.absent-box ul { margin: 6px 0 0; padding-left: 18px; }
+.absent-box li { margin: 6px 0; }
+
+/* side panel */
+#scrim { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 20; }
+#panel {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(460px, 100vw); z-index: 21;
+  background: var(--surface); border-left: 1px solid var(--line); box-shadow: var(--shadow);
+  overflow-y: auto; padding: 16px 18px 40px;
+}
+#panel h2 { font-size: 1.1rem; margin-right: 36px; }
+#panelClose { position: absolute; top: 10px; right: 12px; background: var(--bg); border: 1px solid var(--axis); border-radius: 8px; width: 34px; height: 34px; font-size: 1.1rem; }
+dl.fields { display: grid; grid-template-columns: 9.5rem 1fr; gap: 6px 12px; margin: 10px 0; }
+dl.fields dt { color: var(--ink2); font-size: .84rem; }
+dl.fields dd { margin: 0; font-size: .9rem; overflow-wrap: anywhere; }
+.statusbox { border-radius: 8px; padding: 8px 10px; font-size: .86rem; margin: 8px 0; border: 1px solid var(--axis); background: var(--bg); }
+.statusbox b { display: block; }
+.depth-list { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; margin: 6px 0; font-size: .86rem; align-items: center; }
+.depth-list .sw { width: 28px; }
+
+/* builder */
+.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 960px) { .builder { grid-template-columns: minmax(0, 1fr); } }
+.field { margin: 12px 0; }
+.field .row { display: flex; justify-content: space-between; gap: 8px; font-size: .9rem; }
+.field .row output { font-weight: 700; font-variant-numeric: tabular-nums; }
+.topic { display: grid; grid-template-columns: minmax(0, 1fr) 96px 7.5rem; gap: 8px; align-items: center; margin: 3px 0; font-size: .86rem; }
+@media (max-width: 520px) { .topic { grid-template-columns: minmax(0, 1fr) 80px 5.5rem; } }
+.topic output { font-size: .78rem; color: var(--ink2); }
+.bigcost { font-size: 2rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.out { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 12px; }
+.comp { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; margin: 6px 0; background: var(--bg); }
+.comp .nm { font-weight: 600; font-size: .9rem; }
+.comp .meta { grid-column: 1 / -1; font-size: .8rem; color: var(--ink2); }
+.score { font-weight: 700; font-variant-numeric: tabular-nums; }
+.info {
+  display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%;
+  border: 1px solid var(--axis); background: var(--bg); font-size: .72rem; font-weight: 700; padding: 0; color: var(--ink2);
+  vertical-align: middle;
+}
+.pill { display: inline-block; font-size: .8rem; border-radius: 999px; padding: 1px 10px; background: var(--bg); border: 1px solid var(--axis); margin: 2px 4px 2px 0; }
+.pill.gap { background: var(--open-bg); color: var(--open-ink); border-color: transparent; font-weight: 600; }
+.cmp-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 10px; }
+.cmp-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table.cmp { border-collapse: collapse; width: 100%; font-size: .84rem; }
+.cmp th, .cmp td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.cmp thead th { background: var(--bg); font-size: .8rem; }
+.cmp tbody th { font-weight: 500; color: var(--ink2); min-width: 6.5rem; background: var(--surface); }
+.cmp td { min-width: 8rem; }
+.cmp tr.sect th { background: var(--bg); color: var(--ink); font-weight: 700; font-size: .76rem; text-transform: uppercase; letter-spacing: .03em; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.dchip { display: inline-grid; place-items: center; min-width: 26px; height: 20px; border-radius: 4px; font-size: .78rem; font-weight: 700; padding: 0 4px; }
+.dchip.d0 { background: var(--d0); color: var(--d0t); } .dchip.d1 { background: var(--d1); color: var(--d1t); }
+.dchip.d2 { background: var(--d2); color: var(--d2t); } .dchip.d3 { background: var(--d3); color: var(--d3t); }
+.dchip.dn { background: repeating-linear-gradient(45deg, transparent 0 4px, var(--hatch) 4px 5px), var(--surface); color: var(--muted); border: 1px solid var(--line); }
+.bars { margin-top: 12px; }
+.bars .brow { display: grid; grid-template-columns: minmax(90px, 160px) 1fr; gap: 10px; align-items: center; margin: 6px 0; font-size: .84rem; }
+.bars .track { position: relative; height: 22px; }
+.bars .bar { height: 14px; margin-top: 4px; border-radius: 0 4px 4px 0; min-width: 2px; }
+.bars .val { position: absolute; top: 0; font-weight: 600; font-size: .8rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.strip-card { margin-top: 16px; }
+.strip-scroll { overflow-x: auto; }
+details.listview { margin-top: 8px; font-size: .86rem; }
+details.listview ol { margin: 6px 0 0; padding-left: 20px; columns: 2 280px; }
+
+/* tooltip */
+#tip {
+  position: fixed; z-index: 40; max-width: 290px; pointer-events: none;
+  background: var(--ink); color: var(--bg); border-radius: 8px; padding: 6px 10px; font-size: .8rem; line-height: 1.35;
+  box-shadow: var(--shadow);
+}
+
+/* load error */
+#loadError { margin: 24px 0; }
+#loadError .card { border-color: var(--mock); }
+#loadError code { background: var(--bg); padding: 1px 6px; border-radius: 4px; font-size: .88em; }
+#loadError ol { padding-left: 20px; }
+[hidden] { display: none !important; }
+@media print { #panel, #scrim, .theme-btn { display: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div>
+        <h1>Online BME Master's Landscape</h1>
+        <p class="sub" id="subline">Built from the landscape scan (September 2026). Nothing here comes from outside the scan.</p>
+      </div>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch between light and dark mode">Light / dark</button>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Views" id="tabs" hidden>
+      <button class="tab" role="tab" id="tab-heat" aria-controls="view-heat" aria-selected="true" type="button">Coverage heatmap</button>
+      <button class="tab" role="tab" id="tab-build" aria-controls="view-build" aria-selected="false" type="button">Program builder and comparator</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="loading" class="card" role="status">Loading data.json…</section>
+
+  <section id="loadError" hidden aria-live="polite"></section>
+
+  <section id="view-heat" role="tabpanel" aria-labelledby="tab-heat" hidden>
+    <div class="banner" id="banner" role="note">
+      <span>Depth ratings are readings of program descriptions in the scan, not of syllabi. They are directional. Verify any cell before citing it.</span>
+      <button type="button" id="bannerClose" aria-label="Dismiss this notice">×</button>
+    </div>
+
+    <div class="card">
+      <div class="filters" id="filters"></div>
+      <p class="note" id="costNote"></p>
+    </div>
+
+    <div class="legend" aria-label="How to read the cells">
+      <span><i class="sw dn">?</i> not stated in the scan (unknown, not zero)</span>
+      <span><i class="sw d0">0</i> absent</span>
+      <span><i class="sw d1">1</i> one course</span>
+      <span><i class="sw d2">2</i> several courses</span>
+      <span><i class="sw d3">3</i> a track, focus area or whole degree</span>
+    </div>
+
+    <div class="hm-wrap" id="hmWrap" tabindex="0" aria-label="Coverage heatmap. Scroll sideways on narrow screens."></div>
+    <p class="note" id="hmNote"></p>
+
+    <div class="card absent-box" id="absentBox"></div>
+  </section>
+
+  <section id="view-build" role="tabpanel" aria-labelledby="tab-build" hidden>
+    <div class="builder">
+      <div class="card" id="designCard"></div>
+      <div class="card" id="compareCard"></div>
+    </div>
+    <div class="card strip-card">
+      <h2>Every program by total cost</h2>
+      <p class="sub" id="stripNote"></p>
+      <div class="strip-scroll"><div id="strip"></div></div>
+      <details class="listview"><summary>Show the same data as a list</summary><ol id="stripList"></ol></details>
+    </div>
+  </section>
+</main>
+
+<div id="scrim" hidden></div>
+<aside id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle" hidden>
+  <button type="button" id="panelClose" aria-label="Close details">×</button>
+  <div id="panelBody"></div>
+</aside>
+<div id="tip" role="tooltip" hidden></div>
+
+<script>
+"use strict";
+
+/* ---------- fixed vocabulary ---------- */
+// The thirteen subfields. "key" must match the keys in data.json exactly.
+const FIELDS = [
+  { key: "device design and development",       label: "Device design & development" },
+  { key: "SaMD and AI-enabled devices",         label: "Software & AI as a medical device (SaMD)" },
+  { key: "AI/ML in medicine (data side)",       label: "AI in medicine (data side)" },
+  { key: "wearables and remote monitoring",     label: "Wearables & remote monitoring" },
+  { key: "digital health",                      label: "Digital health" },
+  { key: "health data and informatics",         label: "Health data & informatics" },
+  { key: "medical imaging",                     label: "Medical imaging" },
+  { key: "biomechanics and rehab",              label: "Biomechanics & rehab" },
+  { key: "regulatory and quality",              label: "Regulatory & quality" },
+  { key: "neuroengineering",                    label: "Neuroengineering" },
+  { key: "tissue engineering and biomaterials", label: "Tissue engineering & biomaterials" },
+  { key: "computational and systems biology",   label: "Computational & systems biology" },
+  { key: "clinical engineering",                label: "Clinical engineering (hospital technology)" }
+];
+const SAMD_KEY = "SaMD and AI-enabled devices";
+const CATS = {
+  "direct":             "Direct competitor",
+  "adjacent":           "Adjacent program",
+  "residential-signal": "In-person medtech",
+  "pathway-signal":     "Pathway model",
+  "absent":             "No online program"
+};
+const SCORED_CATS = ["direct", "adjacent", "residential-signal"];
+const DEPTH_WORDS = { 0: "absent", 1: "one course", 2: "several courses", 3: "track, focus area or whole degree" };
+const FORMATS = { "online": "Online", "hybrid": "Hybrid", "campus": "On campus", "finish-remotely": "Finish remotely" };
+const DELIVERY = { "in-house": "Built in-house by the university", "OPM": "Outside online-program company (OPM)", "unknown": "Not determined" };
+const STATUS = {
+  "linked":      { name: "Linked", text: "Read on an official or named page, and the link is given." },
+  "second-pass": { name: "Second pass", text: "Came from the expanded research report, which cited official pages, but the link was not carried into the scan. Confirm before using outside this office." },
+  "aggregator":  { name: "Aggregator only", text: "Rests on an aggregator listing, not an official page. Treat as unconfirmed." }
+};
+// Price bands as named in the scan (section 5, "Price bands").
+const BANDS = [
+  { id: "low",     label: "public low-cost",   lo: 22000, hi: 35000 },
+  { id: "mid",     label: "middle",            lo: 39000, hi: 47000 },
+  { id: "premium", label: "private premium",   lo: 56000, hi: 89000 }
+];
+// FDA AI-enabled device list counts, as given in the scan (section 6).
+const FDA = [
+  { when: "Oct 2023",     t: Date.UTC(2023, 9, 1),  n: 692 },
+  { when: "Mar 2024",     t: Date.UTC(2024, 2, 1),  n: 882 },
+  { when: "End of 2025",  t: Date.UTC(2025, 11, 31), n: 1451 },
+  { when: "Aug 2026",     t: Date.UTC(2026, 7, 1),  n: 1524 }
+];
+const SCAN_GAP_MIX = { "SaMD and AI-enabled devices": 3, "wearables and remote monitoring": 2, "device design and development": 2, "regulatory and quality": 2 };
+
+/* ---------- small helpers ---------- */
+const $ = (sel, root) => (root || document).querySelector(sel);
+function el(tag, props, ...kids) {
+  const n = document.createElement(tag);
+  if (props) for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat(Infinity)) {
+    if (c == null || c === false) continue;
+    n.append(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  return n;
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+function svg(tag, attrs, ...kids) {
+  const n = document.createElementNS(SVGNS, tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v);
+  for (const c of kids.flat(Infinity)) if (c != null) n.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return n;
+}
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+const num = n => Math.round(n).toLocaleString("en-US");
+const isUrl = u => typeof u === "string" && /^https?:\/\//i.test(u);
+const NP = "not published";
+function depthText(v) { return v == null ? "not stated in the scan" : DEPTH_WORDS[v]; }
+function depthClass(v) { return v == null ? "dn" : "d" + v; }
+function depthGlyph(v) { return v == null ? "?" : String(v); }
+
+/* ---------- state ---------- */
+const S = {
+  all: [], progs: [], absent: [],
+  filt: { cats: new Set(), format: "", state: "", costMin: 0, costMax: 0, hideNoCost: false },
+  bounds: { min: 0, max: 0 },
+  sort: { key: "order", dir: 1 },
+  selId: null,
+  mock: { credits: 30, price: 1000, format: "online", depth: {} },
+  compare: ["mock", null, null],
+  includeInPerson: true
+};
+FIELDS.forEach(f => { S.mock.depth[f.key] = 0; });
+
+/* ---------- loading ---------- */
+async function load() {
+  try {
+    const r = await fetch("data.json", { cache: "no-store" });
+    if (!r.ok) throw { kind: "http", status: r.status };
+    const text = await r.text();
+    let json;
+    try { json = JSON.parse(text); } catch (e) { throw { kind: "parse", detail: e.message }; }
+    start(json);
+  } catch (e) {
+    showLoadError(e);
+  }
+}
+
+function validate(data) {
+  const problems = [];
+  if (!Array.isArray(data)) return ["The file should be a list of programs, but it is not a list."];
+  if (!data.length) return ["The list of programs is empty."];
+  const seen = new Set();
+  data.forEach((p, i) => {
+    const tag = "Program " + (i + 1) + (p && p.name ? " (" + p.name + ")" : "");
+    if (!p || typeof p !== "object") { problems.push(tag + " is not a program entry."); return; }
+    if (typeof p.id !== "string" || !p.id) problems.push(tag + " has no id.");
+    else if (seen.has(p.id)) problems.push(tag + " repeats the id " + p.id + ".");
+    else seen.add(p.id);
+    if (typeof p.name !== "string" || !p.name) problems.push(tag + " has no name.");
+    if (!(p.category in CATS)) problems.push(tag + " has an unknown category: " + p.category + ".");
+    if (!p.topicDepth || typeof p.topicDepth !== "object") problems.push(tag + " has no topicDepth.");
+    else for (const f of FIELDS) {
+      const v = p.topicDepth[f.key];
+      if (!(v === null || v === 0 || v === 1 || v === 2 || v === 3)) problems.push(tag + " has a bad rating for “" + f.key + "”.");
+    }
+    for (const k of ["credits", "courses", "totalCost", "costHigh", "perCredit"]) {
+      if (p[k] != null && typeof p[k] !== "number") problems.push(tag + " has a non-number in " + k + ".");
+    }
+  });
+  return problems;
+}
+
+function showLoadError(e) {
+  $("#loading").hidden = true;
+  $("#tabs").hidden = true;
+  $("#view-heat").hidden = true; $("#view-build").hidden = true;
+  const box = $("#loadError");
+  box.hidden = false;
+  box.replaceChildren();
+  const card = el("div", { class: "card" });
+  const onFile = location.protocol === "file:";
+  if (e && e.kind === "parse") {
+    card.append(el("h2", { text: "data.json is there, but I can't read it" }),
+      el("p", { text: "The file is not valid JSON, which usually means a stray comma, a missing quote or bracket, or a half-saved edit." }),
+      el("p", { class: "muted small", text: "The reader says: " + e.detail }));
+  } else if (e && e.kind === "invalid") {
+    card.append(el("h2", { text: "data.json is readable, but something in it is off" }),
+      el("ul", null, e.problems.slice(0, 8).map(t => el("li", { text: t }))),
+      e.problems.length > 8 ? el("p", { class: "muted small", text: "…and " + (e.problems.length - 8) + " more." }) : null);
+  } else if (e && e.kind === "http") {
+    card.append(el("h2", { text: "I can't find data.json" }),
+      el("p", { text: "The page asked for data.json and the server answered " + e.status + ". Make sure data.json sits in the same folder as index.html, with exactly that name." }));
+  } else if (onFile) {
+    card.append(el("h2", { text: "The browser won't let this page read data.json from a folder" }),
+      el("p", { text: "You opened index.html straight from your computer. For safety, most browsers (Chrome and Edge in particular) refuse to let a page read a second file that way. Nothing is wrong with the files." }),
+      el("p", { text: "Two ways around it:" }),
+      el("ol", null,
+        el("li", { text: "Use the button below to pick data.json yourself. This works right now, with no setup." }),
+        el("li", { text: "Or view the page from a web address (for example GitHub Pages for this repository), where it loads data.json automatically." })));
+  } else {
+    card.append(el("h2", { text: "I can't find or read data.json" }),
+      el("p", { text: "Either data.json is missing from the folder next to index.html, or the connection failed. Check that the file is there and is named exactly data.json." }));
+  }
+  const input = el("input", { type: "file", accept: ".json,application/json", id: "pickFile" });
+  input.addEventListener("change", () => {
+    const f = input.files && input.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try { start(JSON.parse(String(rd.result))); }
+      catch (err) { showLoadError({ kind: "parse", detail: err.message }); }
+    };
+    rd.onerror = () => showLoadError({ kind: "http", status: "unreadable" });
+    rd.readAsText(f);
+  });
+  card.append(el("p", null, el("label", { for: "pickFile" }, el("b", { text: "Pick data.json from your computer: " })), input));
+  box.append(card);
+}
+
+function start(data) {
+  const problems = validate(data);
+  if (problems.length) { showLoadError({ kind: "invalid", problems }); return; }
+  $("#loadError").hidden = true;
+  $("#loading").hidden = true;
+  S.all = data;
+  S.progs = data.filter(p => p.category !== "absent");
+  S.absent = data.filter(p => p.category === "absent");
+  const costs = S.progs.map(p => p.totalCost).filter(c => c != null);
+  S.bounds.min = Math.floor(Math.min(...costs) / 1000) * 1000;
+  S.bounds.max = Math.ceil(Math.max(...costs) / 1000) * 1000;
+  S.filt.costMin = S.bounds.min; S.filt.costMax = S.bounds.max;
+  S.filt.cats = new Set([...new Set(S.progs.map(p => p.category))]);
+  const byId = new Set(S.progs.map(p => p.id));
+  const pick = ["purdue-weldon-ms-bme", "case-western-ms-bme"].filter(i => byId.has(i));
+  S.compare = ["mock", pick[0] || null, pick[1] || null];
+
+  $("#subline").textContent = "Built from the landscape scan (September 2026). Nothing here comes from outside the scan. " +
+    data.length + " entries in data.json: " + S.progs.length + " programs in the heatmap and " + S.absent.length + " checked with no online program.";
+  $("#tabs").hidden = false;
+  buildFilters();
+  buildDesign();
+  buildComparePicks();
+  showTab("heat");
+  renderHeatmap();
+  renderAbsent();
+  updateBuilder();
+}
+
+/* ---------- tabs, theme ---------- */
+function showTab(which) {
+  const heat = which === "heat";
+  $("#view-heat").hidden = !heat; $("#view-build").hidden = heat;
+  $("#tab-heat").setAttribute("aria-selected", String(heat));
+  $("#tab-build").setAttribute("aria-selected", String(!heat));
+  if (!heat) renderStrip();
+}
+$("#tab-heat").addEventListener("click", () => showTab("heat"));
+$("#tab-build").addEventListener("click", () => showTab("build"));
+$("#tabs").addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    const goBuild = $("#tab-heat").getAttribute("aria-selected") === "true";
+    showTab(goBuild ? "build" : "heat");
+    $(goBuild ? "#tab-build" : "#tab-heat").focus();
+  }
+});
+$("#bannerClose").addEventListener("click", () => { $("#banner").hidden = true; });
+
+(function theme() {
+  try { const t = localStorage.getItem("bme-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  $("#themeBtn").addEventListener("click", () => {
+    const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("bme-theme", next); } catch (e) {}
+    if (S.progs.length) renderStrip();
+  });
+})();
+
+/* ---------- tooltip ---------- */
+const tip = $("#tip");
+function showTip(text, x, y) {
+  tip.textContent = text; tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = Math.min(x + 12, innerWidth - w - 8), top = y + 16;
+  if (top + h > innerHeight - 8) top = y - h - 12;
+  tip.style.left = Math.max(8, left) + "px"; tip.style.top = Math.max(8, top) + "px";
+}
+function hideTip() { tip.hidden = true; }
+function tipOn(node, textFn) {
+  node.addEventListener("pointermove", e => showTip(typeof textFn === "function" ? textFn() : textFn, e.clientX, e.clientY));
+  node.addEventListener("pointerleave", hideTip);
+  node.addEventListener("focus", () => { const r = node.getBoundingClientRect(); showTip(typeof textFn === "function" ? textFn() : textFn, r.left, r.bottom - 10); });
+  node.addEventListener("blur", hideTip);
+}
+function infoButton(text) {
+  const b = el("button", { type: "button", class: "info", "aria-label": text, title: text }, "i");
+  tipOn(b, text);
+  b.addEventListener("click", e => { const r = b.getBoundingClientRect(); showTip(text, r.left, r.bottom - 10); setTimeout(hideTip, 6000); });
+  return b;
+}
+
+/* ---------- heatmap: filters ---------- */
+function buildFilters() {
+  const f = $("#filters"); f.replaceChildren();
+  const catSet = [...new Set(S.progs.map(p => p.category))];
+  const cats = el("fieldset", null, el("legend", { text: "Category" }),
+    el("div", { class: "checks" }, catSet.map(c =>
+      el("label", null,
+        el("input", { type: "checkbox", checked: true, "data-cat": c, onchange: ev => {
+          if (ev.target.checked) S.filt.cats.add(c); else S.filt.cats.delete(c);
+          renderHeatmap();
+        } }), CATS[c]))));
+  const fmts = [...new Set(S.progs.map(p => p.format))];
+  const fmtSel = el("select", { id: "fFormat", onchange: ev => { S.filt.format = ev.target.value; renderHeatmap(); } },
+    el("option", { value: "", text: "All formats" }),
+    Object.keys(FORMATS).filter(k => fmts.includes(k)).map(k => el("option", { value: k, text: FORMATS[k] })),
+    fmts.includes(null) ? el("option", { value: "__none", text: "Format not stated" }) : null);
+  const states = [...new Set(S.progs.map(p => p.state).filter(Boolean))].sort();
+  const stSel = el("select", { id: "fState", onchange: ev => { S.filt.state = ev.target.value; renderHeatmap(); } },
+    el("option", { value: "", text: "All states" }), states.map(s => el("option", { value: s, text: s })));
+  const lo = el("input", { type: "range", id: "fMin", min: S.bounds.min, max: S.bounds.max, step: 1000, value: S.bounds.min, "aria-label": "Lowest total cost to show" });
+  const hi = el("input", { type: "range", id: "fMax", min: S.bounds.min, max: S.bounds.max, step: 1000, value: S.bounds.max, "aria-label": "Highest total cost to show" });
+  const lab = el("span", { id: "fCostLabel", class: "small" });
+  function onCost(which) {
+    let a = +lo.value, b = +hi.value;
+    if (a > b) { if (which === "lo") { a = b; lo.value = a; } else { b = a; hi.value = b; } }
+    S.filt.costMin = a; S.filt.costMax = b; renderHeatmap();
+  }
+  lo.addEventListener("input", () => onCost("lo")); hi.addEventListener("input", () => onCost("hi"));
+  const cost = el("div", { class: "range-pair" }, el("span", { class: "lbl", style: "font-size:.78rem;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.03em" }, "Total cost range"), lo, hi, lab);
+  const hide = el("label", { class: "small", style: "display:flex;gap:6px;align-items:center;margin-top:4px" },
+    el("input", { type: "checkbox", id: "fHide", onchange: ev => { S.filt.hideNoCost = ev.target.checked; renderHeatmap(); } }), "Hide programs with no published cost");
+  const sortSel = el("select", { id: "fSort", onchange: ev => {
+      const v = ev.target.value;
+      if (v === "order") S.sort = { key: "order", dir: 1 };
+      else if (v === "name") S.sort = { key: "name", dir: 1 };
+      else if (v === "cost-asc") S.sort = { key: "cost", dir: 1 };
+      else if (v === "cost-desc") S.sort = { key: "cost", dir: -1 };
+      else S.sort = { key: v, dir: -1 };
+      renderHeatmap();
+    } },
+    el("option", { value: "order", text: "Order in the scan" }),
+    el("option", { value: "name", text: "Program name (A to Z)" }),
+    el("option", { value: "cost-asc", text: "Total cost, lowest first" }),
+    el("option", { value: "cost-desc", text: "Total cost, highest first" }),
+    FIELDS.map(x => el("option", { value: x.key, text: x.label + ", deepest first" })));
+  const reset = el("button", { type: "button", class: "btn", onclick: resetFilters }, "Reset filters");
+  f.append(cats,
+    el("div", null, el("label", { class: "lbl", for: "fFormat", text: "Format" }), fmtSel),
+    el("div", null, el("label", { class: "lbl", for: "fState", text: "State" }), stSel),
+    el("div", null, cost, hide),
+    el("div", null, el("label", { class: "lbl", for: "fSort", text: "Sort by" }), sortSel),
+    el("div", { style: "align-self:end" }, reset));
+}
+function resetFilters() {
+  S.filt.cats = new Set(S.progs.map(p => p.category));
+  S.filt.format = ""; S.filt.state = ""; S.filt.costMin = S.bounds.min; S.filt.costMax = S.bounds.max; S.filt.hideNoCost = false;
+  S.sort = { key: "order", dir: 1 };
+  buildFilters(); renderHeatmap();
+}
+
+/* ---------- heatmap: rows ---------- */
+function visibleRows() {
+  const F = S.filt;
+  return S.progs.filter(p => {
+    if (!F.cats.has(p.category)) return false;
+    if (F.format === "__none" ? p.format != null : (F.format && p.format !== F.format)) return false;
+    if (F.state && p.state !== F.state) return false;
+    if (p.totalCost == null) return !F.hideNoCost;
+    return p.totalCost >= F.costMin && p.totalCost <= F.costMax;
+  });
+}
+function sortRows(rows) {
+  const { key, dir } = S.sort;
+  const idx = new Map(S.progs.map((p, i) => [p.id, i]));
+  const val = p => key === "order" ? idx.get(p.id)
+    : key === "name" ? (p.university + " " + p.name).toLowerCase()
+    : key === "cost" ? p.totalCost
+    : p.topicDepth[key];
+  return rows.slice().sort((a, b) => {
+    const va = val(a), vb = val(b);
+    if (va == null && vb == null) return idx.get(a.id) - idx.get(b.id);
+    if (va == null) return 1;          // unknowns always sink to the bottom
+    if (vb == null) return -1;
+    if (va < vb) return -dir; if (va > vb) return dir;
+    return idx.get(a.id) - idx.get(b.id);
+  });
+}
+function setSort(key) {
+  if (S.sort.key === key) S.sort.dir *= -1;
+  else S.sort = { key, dir: (key === "order" || key === "name" || key === "cost") ? 1 : -1 };
+  renderHeatmap();
+}
+function sortSelValue() {
+  const { key, dir } = S.sort;
+  if (key === "order" || key === "name") return key;
+  if (key === "cost") return dir === 1 ? "cost-asc" : "cost-desc";
+  return key;
+}
+
+function sparkline() {
+  const W = 76, H = 26, pad = 3;
+  const t0 = FDA[0].t, t1 = FDA[FDA.length - 1].t, v0 = FDA[0].n, v1 = FDA[FDA.length - 1].n;
+  const pts = FDA.map(d => [pad + (d.t - t0) / (t1 - t0) * (W - 2 * pad), H - pad - (d.n - v0) / (v1 - v0) * (H - 2 * pad)]);
+  const desc = "FDA list of AI-enabled devices: " + FDA.map(d => num(d.n) + " in " + d.when).join("; ");
+  const s = svg("svg", { class: "spark", width: W, height: H, viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": desc, tabindex: "0" },
+    svg("polyline", { points: pts.map(p => p.join(",")).join(" "), fill: "none", stroke: "var(--accent)", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }),
+    pts.map((p, i) => svg("circle", { cx: p[0], cy: p[1], r: i === 0 || i === pts.length - 1 ? 3 : 2.2, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 1.5 })));
+  tipOn(s, desc + ". The FDA says its list is not exhaustive.");
+  return s;
+}
+
+function renderHeatmap() {
+  const rows = sortRows(visibleRows());
+  const wrap = $("#hmWrap");
+  const scrollTop = wrap.scrollTop, scrollLeft = wrap.scrollLeft;
+  wrap.replaceChildren();
+
+  // header
+  const arrow = key => S.sort.key === key ? el("span", { class: "arr", "aria-hidden": "true" }, S.sort.dir === 1 ? " ▲" : " ▼") : null;
+  const ariaSort = key => S.sort.key === key ? (S.sort.dir === 1 ? "ascending" : "descending") : "none";
+  const head = el("tr", null,
+    el("th", { class: "prog", scope: "col", "aria-sort": ariaSort("name") }, el("button", { class: "sortbtn", type: "button", onclick: () => setSort("name") }, "Program", arrow("name"))),
+    el("th", { class: "costcol", scope: "col", "aria-sort": ariaSort("cost") }, el("button", { class: "sortbtn", type: "button", onclick: () => setSort("cost") }, "Total cost", arrow("cost"))),
+    FIELDS.map(f => el("th", { scope: "col", "aria-sort": ariaSort(f.key) },
+      f.key === SAMD_KEY ? [sparkline(), el("span", { class: "spark-cap" }, "FDA AI devices 692 → 1,524")] : null,
+      el("button", { class: "sortbtn", type: "button", onclick: () => setSort(f.key) }, f.label, arrow(f.key)))));
+  const thead = el("thead", null, head);
+
+  // body
+  const tbody = el("tbody");
+  rows.forEach(p => {
+    const closed = p.admitting === false;
+    const tr = el("tr", { class: (closed ? "closed " : "") + (S.selId === p.id ? "sel" : ""), "data-id": p.id },
+      el("th", { class: "prog", scope: "row" },
+        el("button", { class: "rowbtn", type: "button", "aria-label": "Open details for " + p.university + ", " + p.name, onclick: ev => { ev.stopPropagation(); openPanel(p.id); } },
+          el("span", { class: "pname" }, p.university),
+          el("span", { class: "pdeg" }, p.name),
+          el("span", { class: "chips" },
+            el("span", { class: "chip" }, CATS[p.category]),
+            p.format ? el("span", { class: "chip" }, FORMATS[p.format] || p.format) : null,
+            closed ? el("span", { class: "chip warn" }, "Not admitting") : null,
+            p.status !== "linked" ? el("span", { class: "chip" }, STATUS[p.status] ? STATUS[p.status].name : p.status) : null))),
+      el("td", { class: "costtd" }, p.totalCost != null ? money(p.totalCost) : el("span", { class: "np" }, NP)),
+      FIELDS.map(f => {
+        const v = p.topicDepth[f.key];
+        const td = el("td", { class: "cell " + depthClass(v), "aria-label": f.label + ": " + depthText(v) }, depthGlyph(v));
+        tipOn(td, () => p.university + " — " + f.label + ": " + (v == null ? "not stated in the scan (unknown, not zero)" : v + " (" + depthText(v) + ")"));
+        return td;
+      }));
+    tr.addEventListener("click", () => openPanel(p.id));
+    tbody.append(tr);
+  });
+
+  // footer: crowding counts (open programs only, rows currently shown)
+  const counting = rows.filter(p => p.admitting !== false);
+  const tfoot = el("tfoot", null, el("tr", null,
+    el("th", { class: "prog", scope: "row" }, "Programs rating 2 or 3", el("span", { class: "pdeg", style: "font-weight:400" }, "among the " + counting.length + " open programs shown")),
+    el("td", null),
+    FIELDS.map(f => {
+      const n = counting.filter(p => p.topicDepth[f.key] >= 2).length;   // null >= 2 is false
+      const open = n <= 1;
+      return el("td", { class: open ? "open" : "" },
+        el("span", { class: "foot-n" }, String(n)),
+        open ? el("span", { class: "foot-l" }, "white space") : null);
+    })));
+
+  if (!rows.length) {
+    wrap.append(el("div", { class: "empty" }, "No programs match these filters. Try “Reset filters”."));
+  } else {
+    wrap.append(el("table", { class: "hm" }, el("caption", { class: "sr", style: "position:absolute;left:-9999px" }, "Programs by topic depth"), thead, tbody, tfoot));
+  }
+  wrap.scrollTop = scrollTop; wrap.scrollLeft = scrollLeft;
+
+  const fs = $("#fSort"); if (fs) fs.value = sortSelValue();
+  const lbl = $("#fCostLabel"); if (lbl) lbl.textContent = money(S.filt.costMin) + " to " + money(S.filt.costMax);
+
+  // notes
+  const noCost = S.progs.filter(p => p.totalCost == null).length;
+  const closedCount = S.progs.filter(p => p.admitting === false && p.totalCost != null).length;
+  const excluded = S.progs.filter(p => p.totalCost == null || p.admitting === false).length;
+  const pct = Math.round(100 * excluded / S.progs.length);
+  $("#costNote").replaceChildren(
+    el("b", { text: excluded + " of " + S.progs.length + " programs (" + pct + "%) are left out of the cost views" }),
+    " (the cost strip and the closest-competitor scoring): " + noCost + " have no published cost" +
+    (closedCount ? " and " + closedCount + " are not admitting" : "") +
+    ". They still appear in the heatmap. The cost slider doesn't apply to them; tick the box to hide them.");
+  $("#hmNote").textContent = "Showing " + rows.length + " of " + S.progs.length + " programs. Footer counts cover only the programs shown and skip any that aren't admitting. A column with 0 or 1 is highlighted as white space.";
+}
+
+function renderAbsent() {
+  const box = $("#absentBox"); box.replaceChildren();
+  box.append(el("h2", { text: "No online program" }),
+    el("p", { class: "sub", text: "Checked in the scan and not found as an online master's in this field. The absence is itself a finding. These are not in the heatmap or any scoring." }),
+    el("ul", null, S.absent.map(p => el("li", null,
+      el("b", { text: p.university }), " — ", p.name, ". ", p.notes, " ",
+      isUrl(p.sourceUrl) ? el("a", { href: p.sourceUrl, target: "_blank", rel: "noopener noreferrer" }, "Source") : el("span", { class: "muted" }, "(no link in the scan)")))));
+}
+
+/* ---------- side panel ---------- */
+let lastFocus = null;
+function openPanel(id) {
+  const p = S.all.find(x => x.id === id); if (!p) return;
+  lastFocus = document.activeElement;
+  S.selId = id;
+  const st = STATUS[p.status] || { name: String(p.status), text: "" };
+  const dd = (dt, val) => [el("dt", { text: dt }), el("dd", null, val)];
+  const nv = (v, f) => v == null ? el("span", { class: "muted" }, NP) : (f ? f(v) : String(v));
+  const body = $("#panelBody"); body.replaceChildren(
+    el("h2", { id: "panelTitle", text: p.university }),
+    el("p", { class: "sub", text: p.name }),
+    el("div", { class: "statusbox" }, el("b", { text: "Verification: " + st.name }), st.text),
+    p.admitting === false ? el("div", { class: "statusbox" }, el("b", { text: "Not admitting" }), "The scan reports this program is not currently admitting students. It is left out of cost views and scoring.") : null,
+    el("dl", { class: "fields" },
+      dd("Source link", isUrl(p.sourceUrl) ? el("a", { href: p.sourceUrl, target: "_blank", rel: "noopener noreferrer" }, "Open the page the scan cites") : el("span", { class: "muted" }, "none given in the scan")),
+      dd("Category", CATS[p.category]),
+      dd("Degree", nv(p.degree)),
+      dd("Format", p.format ? (FORMATS[p.format] || p.format) : el("span", { class: "muted" }, "not stated")),
+      dd("Credits", nv(p.credits)),
+      dd("Courses", nv(p.courses)),
+      dd("Total cost", p.totalCost == null ? el("span", { class: "muted" }, NP) : money(p.totalCost) + (p.costNote ? " (" + p.costNote + ")" : "")),
+      p.costHigh != null ? dd("Higher-tier total", money(p.costHigh)) : null,
+      dd("Per credit", nv(p.perCredit, money)),
+      dd("Cost year", p.costYear ? p.costYear : el("span", { class: "muted" }, "not stated")),
+      dd("Who runs it", DELIVERY[p.deliveryModel] || nv(p.deliveryModel)),
+      dd("Launch", nv(p.launch)),
+      dd("Admitting", p.admitting == null ? "n/a" : (p.admitting ? "Yes" : "No")),
+      dd("Location", (p.city || p.state) ? [p.city, p.state].filter(Boolean).join(", ") : el("span", { class: "muted" }, "not stated")),
+      dd("Notes", p.notes ? p.notes : el("span", { class: "muted" }, "none"))),
+    el("h3", { text: "Topic depth (0 to 3)" }),
+    el("div", { class: "depth-list" }, FIELDS.map(f => {
+      const v = p.topicDepth[f.key];
+      return [el("span", { text: f.label }), el("span", { class: "sw " + depthClass(v), title: depthText(v), "aria-label": depthText(v) }, depthGlyph(v))];
+    })),
+    el("p", { class: "note", text: "“?” means the scan doesn't say. It is not the same as 0, which means the program genuinely doesn't cover it." }));
+  $("#panel").hidden = false; $("#scrim").hidden = false;
+  document.querySelectorAll("#hmWrap tbody tr").forEach(tr => tr.classList.toggle("sel", tr.dataset.id === id));
+  $("#panelClose").focus();
+  $("#panel").scrollTop = 0;
+}
+function closePanel() {
+  $("#panel").hidden = true; $("#scrim").hidden = true; S.selId = null;
+  document.querySelectorAll("#hmWrap tbody tr.sel").forEach(tr => tr.classList.remove("sel"));
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+}
+$("#panelClose").addEventListener("click", closePanel);
+$("#scrim").addEventListener("click", closePanel);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#panel").hidden) closePanel(); });
+
+/* ---------- builder: inputs ---------- */
+function buildDesign() {
+  const c = $("#designCard"); c.replaceChildren();
+  const M = S.mock;
+  const credits = el("input", { type: "range", id: "mCredits", min: 24, max: 45, step: 1, value: M.credits });
+  const price = el("input", { type: "range", id: "mPrice", min: 500, max: 3000, step: 25, value: M.price });
+  const fmt = el("select", { id: "mFormat" }, ["online", "hybrid", "campus"].map(k => el("option", { value: k, text: FORMATS[k] })));
+  fmt.value = M.format;
+  const cOut = el("output", { id: "oCredits", for: "mCredits" }), pOut = el("output", { id: "oPrice", for: "mPrice" });
+  credits.addEventListener("input", () => { M.credits = +credits.value; updateBuilder(); });
+  price.addEventListener("input", () => { M.price = +price.value; updateBuilder(); });
+  fmt.addEventListener("change", () => { M.format = fmt.value; updateBuilder(); });
+
+  const topics = el("div", { id: "topics" }, FIELDS.map((f, i) => {
+    const r = el("input", { type: "range", min: 0, max: 3, step: 1, value: M.depth[f.key], id: "t" + i, "aria-label": f.label });
+    const o = el("output", { id: "to" + i, for: "t" + i });
+    r.addEventListener("input", () => { M.depth[f.key] = +r.value; updateBuilder(); });
+    return el("div", { class: "topic" }, el("label", { for: "t" + i, text: f.label }), r, o);
+  }));
+
+  c.append(el("h2", { text: "Design a BU program" }),
+    el("div", { class: "field" }, el("div", { class: "row" }, el("label", { for: "mCredits", text: "Credits" }), cOut), credits),
+    el("div", { class: "field" }, el("div", { class: "row" }, el("label", { for: "mPrice", text: "Price per credit" }), pOut), price),
+    el("div", { class: "field" }, el("label", { for: "mFormat", class: "small", text: "Format" }), fmt),
+    el("h3", null, "Topic mix ", el("span", { class: "muted small", text: "0 absent · 1 one course · 2 several courses · 3 track or whole degree" })),
+    topics,
+    el("div", { style: "display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" },
+      el("button", { type: "button", class: "btn", onclick: () => setMockDepth(SCAN_GAP_MIX) }, "Load the scan's suggested gap mix"),
+      el("button", { type: "button", class: "btn", onclick: () => setMockDepth({}) }, "Clear topics")),
+    el("div", { class: "out", id: "outputs" }));
+}
+function setMockDepth(map) {
+  FIELDS.forEach((f, i) => { S.mock.depth[f.key] = map[f.key] || 0; $("#t" + i).value = S.mock.depth[f.key]; });
+  updateBuilder();
+}
+
+/* ---------- builder: scoring ---------- */
+function bandFor(cost) {
+  for (const b of BANDS) if (cost >= b.lo && cost <= b.hi) return { inside: true, band: b };
+  if (cost < BANDS[0].lo) return { inside: false, text: "Below every band the scan names (the lowest band starts at " + money(BANDS[0].lo) + ").", nearest: BANDS[0] };
+  const last = BANDS[BANDS.length - 1];
+  if (cost > last.hi) return { inside: false, text: "Above every band the scan names (the top band ends at " + money(last.hi) + ").", nearest: last };
+  for (let i = 0; i < BANDS.length - 1; i++) {
+    const a = BANDS[i], b = BANDS[i + 1];
+    if (cost > a.hi && cost < b.lo) {
+      const nearest = (cost - a.hi) <= (b.lo - cost) ? a : b;
+      return { inside: false, text: "In the gap between the " + a.label + " band (up to " + money(a.hi) + ") and the " + b.label + " band (from " + money(b.lo) + "). Nearer the " + nearest.label + " band.", nearest };
+    }
+  }
+}
+function mockCost() { return S.mock.credits * S.mock.price; }
+function mockTotalDepth() { return FIELDS.reduce((s, f) => s + S.mock.depth[f.key], 0); }
+function competitorPool() {
+  return S.progs.filter(p => SCORED_CATS.includes(p.category) && p.admitting !== false &&
+    (S.includeInPerson || p.category !== "residential-signal"));
+}
+function topicMatch(p) {
+  const tot = mockTotalDepth();
+  if (!tot) return 0;
+  let s = 0;
+  for (const f of FIELDS) s += Math.min(S.mock.depth[f.key], p.topicDepth[f.key] == null ? 0 : p.topicDepth[f.key]);
+  return s / tot;
+}
+function scoreAll() {
+  const pool = competitorPool();
+  const priced = pool.filter(p => p.totalCost != null);
+  const costs = priced.map(p => p.totalCost);
+  const range = costs.length ? Math.max(...costs) - Math.min(...costs) || 1 : 1;
+  const mc = mockCost(), hasTopics = mockTotalDepth() > 0;
+  const ranked = priced.map(p => {
+    const cs = 1 - Math.min(Math.abs(p.totalCost - mc) / range, 1);
+    const ts = topicMatch(p);
+    return { p, cs, ts, score: hasTopics ? 0.5 * cs + 0.5 * ts : cs };
+  }).sort((a, b) => b.score - a.score);
+  const topicOnly = hasTopics ? pool.filter(p => p.totalCost == null).map(p => ({ p, ts: topicMatch(p) })).filter(x => x.ts > 0).sort((a, b) => b.ts - a.ts).slice(0, 3) : [];
+  return { ranked, topicOnly, hasTopics, pricedCount: priced.length, unpricedCount: pool.length - priced.length };
+}
+function coverage() {
+  const existing = S.progs.filter(p => p.category !== "pathway-signal" && p.admitting !== false &&
+    (S.includeInPerson || p.category !== "residential-signal"));
+  const open = [], thin = [];
+  FIELDS.forEach(f => {
+    if (S.mock.depth[f.key] < 2) return;
+    const cov = existing.filter(p => p.topicDepth[f.key] >= 2);
+    if (cov.length === 0) open.push(f);
+    else if (cov.length === 1) thin.push({ f, p: cov[0] });
+  });
+  return { open, thin, n: existing.length };
+}
+
+function updateBuilder() {
+  const M = S.mock, cost = mockCost();
+  $("#oCredits").textContent = M.credits;
+  $("#oPrice").textContent = money(M.price);
+  FIELDS.forEach((f, i) => { $("#to" + i).textContent = M.depth[f.key] + " · " + DEPTH_WORDS[M.depth[f.key]]; });
+
+  const out = $("#outputs"); out.replaceChildren();
+  const band = bandFor(cost);
+  const sc = scoreAll();
+  const cov = coverage();
+
+  out.append(
+    el("div", { class: "small muted", text: "Total cost" }),
+    el("div", { class: "bigcost", text: money(cost) }),
+    el("div", { class: "small muted", text: M.credits + " credits × " + money(M.price) + " per credit" }),
+    el("h3", { text: "Price band" }),
+    el("p", { style: "margin:0" },
+      band.inside ? [el("b", { text: "Lands in the " + band.band.label + " band" }), " (" + money(band.band.lo) + " to " + money(band.band.hi) + " in the scan)."] : band.text),
+    el("p", { class: "small muted", style: "margin:4px 0 0", text: "Bands are the scan's: public low-cost, middle, private premium. The scan did not verify BU's own graduate rate, so where BU actually sits is open." }));
+
+  const h = el("h3", null, "Three closest competitors ",
+    infoButton("Score = half price closeness (how near its total cost is to yours) plus half topic match (the share of your topic ratings it also covers, with unknown ratings counting as no match)."));
+  out.append(h);
+  if (!sc.hasTopics) out.append(el("p", { class: "small muted", text: "No topics set yet, so these are ranked on price alone. Move the topic sliders to bring topic match in." }));
+  sc.ranked.slice(0, 3).forEach(r => {
+    const diff = r.p.totalCost - cost;
+    out.append(el("div", { class: "comp" },
+      el("span", { class: "nm" }, r.p.university, el("span", { class: "muted", style: "font-weight:400" }, " · " + r.p.name)),
+      (() => { const s = el("span", { class: "score", text: Math.round(r.score * 100) + "%", tabindex: "0", "aria-label": "Score " + Math.round(r.score * 100) + " percent" });
+               tipOn(s, "Price closeness " + Math.round(r.cs * 100) + "%, topic match " + (sc.hasTopics ? Math.round(r.ts * 100) + "%" : "not used (no topics set)") + "."); return s; })(),
+      el("span", { class: "meta" },
+        money(r.p.totalCost) + " (" + (diff >= 0 ? "+" : "−") + money(Math.abs(diff)) + " vs. yours)" +
+        (r.p.format ? " · " + (FORMATS[r.p.format] || r.p.format) + (r.p.format === M.format ? " (same format as yours)" : "") : "") +
+        " · " + CATS[r.p.category])));
+  });
+  if (!sc.ranked.length) out.append(el("p", { class: "small muted", text: "No open programs with a published cost to compare against." }));
+  out.append(el("p", { class: "small muted", style: "margin:6px 0 0" },
+    "Scored among " + sc.pricedCount + " open programs that publish a cost. " + sc.unpricedCount + " more can't be scored on price."));
+  if (sc.topicOnly.length) out.append(el("p", { class: "small", style: "margin:6px 0 0" },
+    el("b", { text: "Closest on topics alone (no published price): " }),
+    sc.topicOnly.map(x => x.p.university + " — " + x.p.name + " (" + Math.round(x.ts * 100) + "% topic match)").join("; ") + "."));
+
+  out.append(el("h3", { text: "Your topics nobody else covers at depth" }));
+  const inPerson = el("label", { class: "small", style: "display:flex;gap:6px;align-items:center;margin-bottom:6px" },
+    el("input", { type: "checkbox", id: "incPerson", checked: S.includeInPerson ? true : null, onchange: ev => { S.includeInPerson = ev.target.checked; updateBuilder(); } }),
+    "Count in-person programs as existing coverage");
+  out.append(inPerson);
+  if (!Object.values(M.depth).some(v => v >= 2)) out.append(el("p", { class: "small muted", text: "Rate at least one topic 2 or 3 to see this." }));
+  else {
+    if (cov.open.length) out.append(el("div", null, cov.open.map(f => el("span", { class: "pill gap", text: f.label }))),
+      el("p", { class: "small muted", style: "margin:2px 0 0", text: "No open program in the data rates these 2 or 3 (" + cov.n + " programs checked). Unknown ratings don't count as coverage, so this is where the scan found nothing, not proof that nothing exists." }));
+    else out.append(el("p", { class: "small", text: "Every topic you rated 2 or 3 is already covered at that depth by at least one program." }));
+    if (cov.thin.length) out.append(el("p", { class: "small", style: "margin:8px 0 0" }, el("b", { text: "Covered by just one program: " }),
+      cov.thin.map(t => t.f.label + " (" + t.p.university + ")").join("; ") + "."));
+  }
+  renderCompare();
+  renderStrip();
+}
+
+/* ---------- compare ---------- */
+function buildComparePicks() {
+  const c = $("#compareCard"); c.replaceChildren();
+  c.append(el("h2", { text: "Compare" }),
+    el("p", { class: "sub", text: "Pick up to three: programs from the scan or your BU design." }),
+    el("div", { class: "cmp-pick", id: "cmpPick" }, [0, 1, 2].map(i => {
+      const sel = el("select", { "aria-label": "Compare slot " + (i + 1), onchange: ev => { S.compare[i] = ev.target.value || null; renderCompare(); } },
+        el("option", { value: "", text: "— none —" }),
+        el("option", { value: "mock", text: "My BU design" }),
+        Object.keys(CATS).filter(k => k !== "absent").map(cat => {
+          const list = S.progs.filter(p => p.category === cat);
+          return list.length ? el("optgroup", { label: CATS[cat] }, list.map(p => el("option", { value: p.id, text: p.university + " — " + p.name }))) : null;
+        }));
+      sel.value = S.compare[i] || "";
+      return sel;
+    })),
+    el("div", { id: "cmpOut" }));
+}
+function mockAsProgram() {
+  const M = S.mock;
+  return { id: "mock", name: "My BU design", university: "Boston University (draft)", degree: null, category: "mock", format: M.format, credits: M.credits, courses: null,
+    totalCost: mockCost(), costHigh: null, costNote: null, perCredit: M.price, costYear: null, deliveryModel: null, launch: null, status: null, sourceUrl: null,
+    city: null, state: null, admitting: null, notes: null, topicDepth: Object.assign({}, M.depth), isMock: true };
+}
+function renderCompare() {
+  const out = $("#cmpOut"); if (!out) return;
+  out.replaceChildren();
+  const items = S.compare.map(id => id === "mock" ? mockAsProgram() : S.progs.find(p => p.id === id)).filter(Boolean);
+  if (items.length < 1) { out.append(el("p", { class: "muted", text: "Choose at least one item above." })); return; }
+  let nonMock = 0;
+  items.forEach(it => { it.color = it.isMock ? "var(--mock)" : (nonMock++ === 0 ? "var(--s1)" : "var(--s2)"); });
+
+  const na = el("span", { class: "muted" }, "—");
+  const val = (v, f) => v == null ? el("span", { class: "muted" }, NP) : (f ? f(v) : String(v));
+  const rows = [];
+  const sect = t => rows.push(el("tr", { class: "sect" }, el("th", { colspan: items.length + 1, text: t })));
+  const row = (label, fn) => rows.push(el("tr", null, el("th", { scope: "row", text: label }), items.map(it => el("td", null, fn(it)))));
+  sect("Basics");
+  row("Category", it => it.isMock ? "Your design" : CATS[it.category]);
+  row("Degree", it => it.isMock ? na : val(it.degree));
+  row("Format", it => it.format ? (FORMATS[it.format] || it.format) : el("span", { class: "muted" }, "not stated"));
+  row("Credits", it => val(it.credits));
+  row("Courses", it => it.isMock ? na : val(it.courses));
+  row("Who runs it", it => it.isMock ? na : (DELIVERY[it.deliveryModel] || val(it.deliveryModel)));
+  row("Launch", it => it.isMock ? na : val(it.launch));
+  row("Admitting", it => it.admitting == null ? na : (it.admitting ? "Yes" : "No"));
+  row("Location", it => (it.city || it.state) ? [it.city, it.state].filter(Boolean).join(", ") : na);
+  row("Verification", it => it.isMock ? na : (STATUS[it.status] ? STATUS[it.status].name : val(it.status)));
+  row("Source", it => isUrl(it.sourceUrl) ? el("a", { href: it.sourceUrl, target: "_blank", rel: "noopener noreferrer" }, "Open page") : (it.isMock ? na : el("span", { class: "muted" }, "none given")));
+  sect("Cost");
+  row("Total cost", it => it.totalCost == null ? el("span", { class: "muted" }, NP) : money(it.totalCost) + (it.costNote ? " (" + it.costNote + ")" : ""));
+  row("Higher-tier total", it => it.costHigh == null ? na : money(it.costHigh));
+  row("Per credit", it => val(it.perCredit, money));
+  row("Cost year", it => it.isMock ? na : (it.costYear || el("span", { class: "muted" }, "not stated")));
+  sect("Topic depth (0 to 3, ? = not stated)");
+  FIELDS.forEach(f => row(f.label, it => { const v = it.topicDepth[f.key]; return el("span", { class: "dchip " + depthClass(v), title: depthText(v) }, depthGlyph(v)); }));
+  sect("Notes");
+  row("Notes", it => it.notes ? el("details", { class: "small" }, el("summary", { text: "Show notes" }), el("p", { style: "margin:4px 0 0" }, it.notes)) : na);
+
+  out.append(el("div", { class: "cmp-scroll" }, el("table", { class: "cmp" },
+    el("thead", null, el("tr", null, el("th", { text: "" }), items.map(it => el("th", { scope: "col" },
+      el("span", { class: "dot", style: "background:" + it.color }), it.isMock ? "My BU design" : it.university, it.isMock ? null : el("div", { class: "small muted", style: "font-weight:400" }, it.name))))),
+    el("tbody", null, rows))));
+
+  // bar chart of total cost
+  const costs = items.map(i => i.totalCost).filter(c => c != null);
+  const max = costs.length ? Math.max(...costs) : 1;
+  const bars = el("div", { class: "bars", role: "img", "aria-label": "Total cost: " + items.map(i => (i.isMock ? "My BU design" : i.university) + " " + (i.totalCost == null ? NP : money(i.totalCost))).join("; ") },
+    el("h3", { text: "Total cost" }),
+    items.map(it => el("div", { class: "brow" },
+      el("span", null, it.isMock ? "My BU design" : it.university),
+      el("div", { class: "track" },
+        it.totalCost == null
+          ? el("span", { class: "val muted", style: "left:0;font-weight:400;font-style:italic" }, NP)
+          : [el("div", { class: "bar", style: "width:calc(" + (it.totalCost / max * 100) + "% - 78px);background:" + it.color }),
+             el("span", { class: "val", style: "left:calc(" + (it.totalCost / max * 100) + "% - 74px)" }, money(it.totalCost))]))));
+  out.append(bars);
+}
+
+/* ---------- cost strip ---------- */
+const isCert = p => /certificate/i.test(p.degree || "");
+function renderStrip() {
+  const box = $("#strip"); if (!box || !S.progs.length) return;
+  const pool = S.progs.filter(p => SCORED_CATS.includes(p.category) && p.admitting !== false && p.totalCost != null);
+  const excluded = S.progs.length - pool.length;
+  $("#stripNote").textContent = pool.length + " programs are on the strip. " + excluded + " of " + S.progs.length + " (" + Math.round(100 * excluded / S.progs.length) +
+    "%) are left off because they have no published cost, aren't admitting, or are a pathway model rather than a priced program. Shaded bands are the scan's three price bands. Hollow dots are certificates, not full master's degrees.";
+
+  const list = $("#stripList"); list.replaceChildren();
+  pool.slice().sort((a, b) => a.totalCost - b.totalCost).forEach(p => list.append(el("li", { text: money(p.totalCost) + " — " + p.university + ", " + p.name })));
+  list.append(el("li", { text: money(mockCost()) + " — My BU design (" + S.mock.credits + " credits × " + money(S.mock.price) + ")" }));
+
+  const avail = box.parentElement.clientWidth;
+  if (!avail) return;                       // tab hidden; draw when shown
+  const W = Math.max(avail, 560), padL = 16, padR = 16;
+  const mc = mockCost();
+  const lo = Math.floor(Math.min(...pool.map(p => p.totalCost), mc, BANDS[0].lo) / 10000) * 10000;
+  const hi = Math.ceil(Math.max(...pool.map(p => p.totalCost), mc, BANDS[2].hi) / 10000) * 10000;
+  const x = v => padL + (v - lo) / (hi - lo) * (W - padL - padR);
+
+  // stack overlapping dots
+  const R = 6, rowsEnd = [];
+  const placed = pool.slice().sort((a, b) => a.totalCost - b.totalCost).map(p => {
+    const cx = x(p.totalCost);
+    let r = rowsEnd.findIndex(end => cx - end >= 2 * R + 3);
+    if (r === -1) { r = rowsEnd.length; rowsEnd.push(-1e9); }
+    rowsEnd[r] = cx; return { p, cx, r };
+  });
+  const rowH = 2 * R + 5, bandTop = 26;
+  const axisY = bandTop + 30 + Math.max(rowsEnd.length, 1) * rowH + 10, H = axisY + 30;
+  const root = svg("svg", { width: W, height: H, viewBox: "0 0 " + W + " " + H, role: "img",
+    "aria-label": "Strip of " + pool.length + " programs by total cost, with your design marked at " + money(mc) });
+
+  BANDS.forEach((b, i) => {
+    root.append(svg("rect", { x: x(b.lo), y: bandTop, width: x(b.hi) - x(b.lo), height: axisY - bandTop, fill: i === 1 ? "var(--band-b)" : "var(--band-a)", rx: 6 }),
+      svg("text", { x: (x(b.lo) + x(b.hi)) / 2, y: bandTop + 15, "text-anchor": "middle", fill: "var(--ink2)", "font-size": 11, "font-weight": 600 }, b.label));
+  });
+  for (let v = lo; v <= hi; v += 10000) {
+    root.append(svg("line", { x1: x(v), x2: x(v), y1: axisY, y2: axisY + 5, stroke: "var(--axis)" }),
+      svg("text", { x: x(v), y: axisY + 18, "text-anchor": "middle", fill: "var(--muted)", "font-size": 11 }, "$" + (v / 1000) + "k"));
+  }
+  root.append(svg("line", { x1: padL, x2: W - padR, y1: axisY, y2: axisY, stroke: "var(--axis)" }));
+
+  placed.forEach(d => {
+    const cy = axisY - 10 - d.r * rowH - R;
+    const g = svg("g", { tabindex: "0", role: "img", "aria-label": d.p.university + ", " + d.p.name + ": " + money(d.p.totalCost) });
+    const cert = isCert(d.p);
+    g.append(cert ? svg("circle", { cx: d.cx, cy, r: R - 1, fill: "var(--surface)", stroke: "var(--s1)", "stroke-width": 2 })
+                  : svg("circle", { cx: d.cx, cy, r: R, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2 }));
+    const text = d.p.university + " — " + d.p.name + ": " + money(d.p.totalCost) + (d.p.costYear ? " (" + d.p.costYear + ")" : "") + (cert ? " · certificate, not a master's" : "");
+    tipOn(g, text);
+    g.addEventListener("click", () => { hideTip(); openPanel(d.p.id); });
+    g.style.cursor = "pointer";
+    root.append(g);
+  });
+  // label cheapest and priciest
+  const cheapest = placed[0], priciest = placed[placed.length - 1];
+  [cheapest, priciest].forEach((d, i) => {
+    if (!d) return;
+    root.append(svg("text", { x: d.cx, y: axisY - 10 - d.r * rowH - 2 * R - 4, "text-anchor": i ? "end" : "start", fill: "var(--ink2)", "font-size": 11 },
+      d.p.university.split(" (")[0].replace("University of ", "") + (isCert(d.p) ? " certificate " : " ") + money(d.p.totalCost)));
+  });
+
+  // my design
+  const mx = x(mc), anchor = mx > W - 150 ? "end" : (mx < 150 ? "start" : "middle");
+  const mg = svg("g", { tabindex: "0", role: "img", "aria-label": "My BU design: " + money(mc) });
+  mg.append(svg("line", { x1: mx, x2: mx, y1: 20, y2: axisY, stroke: "var(--mock)", "stroke-width": 2, "stroke-dasharray": "4 3" }),
+    svg("path", { d: "M" + mx + " " + (axisY - 8) + " l8 8 l-8 8 l-8 -8 z", fill: "var(--mock)", stroke: "var(--surface)", "stroke-width": 2 }),
+    svg("text", { x: mx, y: 14, "text-anchor": anchor, fill: "var(--mock-ink)", "font-size": 12, "font-weight": 700, stroke: "var(--surface)", "stroke-width": 3, "paint-order": "stroke" }, "My BU design " + money(mc)));
+  tipOn(mg, "My BU design: " + S.mock.credits + " credits × " + money(S.mock.price) + " = " + money(mc));
+  root.append(mg);
+
+  box.replaceChildren(root);
+}
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (!$("#view-build").hidden) renderStrip(); }, 120); });
+
+load();
+</script>
+</body>
+</html>
