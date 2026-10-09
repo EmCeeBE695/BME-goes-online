@@ -24,6 +24,8 @@ Tuition pages update on an academic-year cycle, so most cost changes land in spr
 
 ## Fields in data.json
 
+Check this list against data.json whenever the schema changes — it went stale once already during the initial build.
+
 Each program object: `id`, `name`, `university`, `degree`, `category` (direct, adjacent, residential-signal, pathway-signal, absent), `format`, `credits`, `courses`, `totalCost`, `costHigh`, `costNote`, `perCredit`, `costYear`, `deliveryModel`, `launch`, `status` (linked, second-pass, aggregator), `sourceUrl`, `city`, `state`, `admitting`, `notes`, and `topicDepth`, an object keyed by the thirteen subfields with values 0 to 3 or null.
 
 `courses` is a count of courses and is never converted to credits. `costHigh` is a second, higher price tier where the scan gives one, and `costNote` says what the two prices are (for Purdue, "resident table vs higher tier").
